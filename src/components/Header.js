@@ -14,7 +14,7 @@ class Header extends React.Component {
                 <Nav className="ml-auto">
                     <NavLink className="px-3" to="/">Home</NavLink>
                     <NavLink to="/shop">Shop</NavLink>
-                    <NavLink to="/">About</NavLink>
+                    <NavLink to="/signup">Sign Up</NavLink>
                 </Nav>
             </Navbar>
         );
