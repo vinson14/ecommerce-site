@@ -5,6 +5,26 @@ import products from "../api/products.json";
 import ProductCard from "../components/ProductCard";
 
 class Shop extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            products: [],
+        };
+    }
+
+    getProducts = async () => {
+        const products = await (await fetch("/products")).json();
+        this.setState(
+            {
+                products: products.products
+            }
+        )
+    };
+
+    componentDidMount() {
+        this.getProducts();
+    }
+
     render() {
         return (
             <div>
@@ -15,8 +35,8 @@ class Shop extends React.Component {
                         </Col>
                     </Row>
                     <Row>
-                        {products.products.map((product) => (
-                            <ProductCard product={product} key={product.id} />
+                        {this.state.products.map(product => (
+                            <ProductCard product={product} key={product.id}/>
                         ))}
                     </Row>
                 </Container>

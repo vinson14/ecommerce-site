@@ -26,7 +26,7 @@ class User(UserMixin, db.Model):
         nullable=False
     )
 
-    cart = db.relationship('Cart',backref='user', lazy=True)
+    cart = db.relationship('Cart', backref='user', lazy=True)
 
     def set_password(self, password):
         """Create hashed password."""
@@ -34,12 +34,14 @@ class User(UserMixin, db.Model):
             password,
             method='sha256'
         )
+
     def check_password(self, password):
         """Check hashed password."""
         return check_password_hash(self.password, password)
 
     def __repr__(self):
         return f"User {self.username}"
+
 
 class Product(db.Model):
 
@@ -68,6 +70,9 @@ class Product(db.Model):
         nullable=False
     )
 
+    cart = db.relationship('Cart', backref='product', lazy=True)
+
+
 class Seller(db.Model):
 
     __tablename__ = "sellers"
@@ -83,10 +88,28 @@ class Seller(db.Model):
         unique=True
     )
 
+    seller_password = db.Column(
+        db.String(200),
+        nullable=False,
+        unique=False
+    )
+
+    def set_password(self, password):
+        """Create hashed password."""
+        self.password = generate_password_hash(
+            password,
+            method='sha256'
+        )
+
+    def check_password(self, password):
+        """Check hashed password."""
+        return check_password_hash(self.password, password)
+
     products = db.relationship('Product', backref='seller', lazy=True)
 
+
 class Cart(db.Model):
-    
+
     __tablename__ = "cart"
 
     id = db.Column(
@@ -110,5 +133,3 @@ class Cart(db.Model):
         db.Integer,
         nullable=False
     )
-
-

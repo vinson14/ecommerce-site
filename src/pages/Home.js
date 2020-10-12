@@ -12,20 +12,6 @@ class Home extends React.Component {
         };
     }
 
-    getData = () => {
-        fetch("/backend")
-            .then((res) => res.json())
-            .then((data) => {
-                this.setState({
-                    message: data.message,
-                });
-            });
-    };
-
-    componentDidMount() {
-        this.getData();
-    }
-
     render() {
         return (
             <Container className="h-100 align-items-center d-flex flex-column justify-content-center">

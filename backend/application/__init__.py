@@ -5,6 +5,7 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+
 def create_app():
     """Initialize the core application. """
     app = Flask(__name__, instance_relative_config=False)
@@ -18,14 +19,16 @@ def create_app():
     with app.app_context():
 
         # Import routes
-        from .home import home
+        from .products import products
         from .auth import auth
+        from .cart import cart
 
         # Register Blueprints
-        app.register_blueprint(home.home_bp)
+        app.register_blueprint(products.products_bp)
         app.register_blueprint(auth.auth_bp)
+        app.register_blueprint(cart.cart_bp)
 
         # Create Database Models
-        db.create_all()
+        # db.create_all()
 
         return app
