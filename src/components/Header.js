@@ -16,6 +16,7 @@ class Header extends React.Component {
                     <NavLink className="mx-3" to="/shop">Shop</NavLink>
                     <NavLink className="mx-3" to="/cart">Cart</NavLink>
                     <NavLink className="mx-3" to="/signup">Sign Up</NavLink>
+                    <NavLink className="mx-3" to="/orders">Orders</NavLink>
                 </Nav>
             </Navbar>
         );

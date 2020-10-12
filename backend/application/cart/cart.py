@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask import current_app as app
 from flask_login import current_user, login_required
 
-from ..models import db, Product, Cart, User
+from ..models import db, Product, Cart, User, Order, PurchaseHistory
 
 cart_bp = Blueprint(
     'cart_bp', __name__,
@@ -64,3 +64,38 @@ def delete_item():
     db.session.delete(item)
     db.session.commit()
     return {"message": "deleted"}
+
+
+@cart_bp.route('/cart/checkout', methods=['GET'])
+@login_required
+def checkout():
+
+    cart_items = Cart.query.filter_by(
+        user_id=current_user.id
+    )
+
+    total_cost = sum([
+        item.quantity * item.product.product_price
+        for item in cart_items
+    ])
+
+    new_order = Order(
+        user_id=current_user.id,
+        total_cost=total_cost
+    )
+
+    db.session.add(new_order)
+    db.session.commit()
+
+    order_id = Order.query.first().id
+
+    for item in cart_items:
+        history_item = PurchaseHistory(
+            product_id=item.product_id,
+            quantity=item.quantity,
+            order_id=order_id
+        )
+        db.session.add(history_item)
+        db.session.delete(item)
+    db.session.commit()
+    return {"success": True}

@@ -46,6 +46,15 @@ class Cart extends React.Component {
         });
     };
 
+    checkOut = async () => {
+        await fetch("/cart/checkout");
+        const cart = await (await fetch("/cart/get")).json();
+        this.setState({
+            cart: cart.cart,
+            totalCost: this.getTotalCost(cart.cart),
+        });
+    };
+
     componentDidMount() {
         this.getCart();
     }
@@ -115,6 +124,16 @@ class Cart extends React.Component {
                                     </tr>
                                 </tfoot>
                             </Table>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className="d-flex justify-content-center p-3">
+                            <Button
+                                onClick={this.checkOut}
+                                variant="outline-dark"
+                            >
+                                Check out
+                            </Button>
                         </Col>
                     </Row>
                 </Container>

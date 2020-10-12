@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
 import Header from "./components/Header";
 
 function App() {
@@ -27,6 +28,9 @@ function App() {
                         </Route>
                         <Route exact path="/signup">
                             <SignUp />
+                        </Route>
+                        <Route exact path="/orders">
+                            <Orders />
                         </Route>
                     </Switch>
                 </div>

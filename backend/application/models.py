@@ -1,5 +1,6 @@
 """Database models."""
 from . import db
+from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -127,6 +128,62 @@ class Cart(db.Model):
         db.Integer,
         db.ForeignKey('products.id'),
         nullable=False
+    )
+
+    quantity = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+
+class Order(db.Model):
+
+    __tablename__ = "orders"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id'),
+        nullable=False
+    )
+
+    total_cost = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    datetime = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.now()
+    )
+
+    purchase_history = db.relationship(
+        'PurchaseHistory', backref='order', lazy=True)
+
+
+class PurchaseHistory(db.Model):
+
+    __tablename__ = "purchasehistory"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    product_id = db.Column(
+        db.Integer,
+        db.ForeignKey('products.id'),
+        nullable=False
+    )
+
+    order_id = db.Column(
+        db.Integer,
+        db.ForeignKey('orders.id')
     )
 
     quantity = db.Column(

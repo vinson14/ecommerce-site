@@ -22,11 +22,13 @@ def create_app():
         from .products import products
         from .auth import auth
         from .cart import cart
+        from .orders import orders
 
         # Register Blueprints
         app.register_blueprint(products.products_bp)
         app.register_blueprint(auth.auth_bp)
         app.register_blueprint(cart.cart_bp)
+        app.register_blueprint(orders.orders_bp)
 
         # Create Database Models
         # db.create_all()
