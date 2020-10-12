@@ -4,3 +4,16 @@ body,
 .App {
     height: 100%;
 }
+
+a {
+    color:black !important;
+}
+
+a:hover {
+    text-decoration: none !important;
+    border-bottom: 1px solid black;
+}
+
+.active {
+    border-bottom: 1px solid black;
+}

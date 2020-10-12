@@ -10,6 +10,7 @@ cart_bp = Blueprint(
     static_folder='static'
 )
 
+
 @cart_bp.route('/cart/add', methods=['POST'])
 @login_required
 def add_cart():
@@ -32,3 +33,34 @@ def add_cart():
     db.session.commit()
 
     return {"success": True}
+
+
+@cart_bp.route('/cart/get', methods=['GET'])
+@login_required
+def get_cart():
+
+    cart_items = [
+        {
+            "id": item.id,
+            "product_id": item.product_id,
+            "product_name": item.product.product_name,
+            "product_price": item.product.product_price,
+            "quantity": item.quantity
+        }
+        for item in Cart.query.filter_by(
+            user_id=current_user.id
+        )
+    ]
+
+    return {"cart": cart_items}
+
+
+@cart_bp.route('/cart/delete', methods=['POST'])
+@login_required
+def delete_item():
+
+    req_data = request.get_json()
+    item = Cart.query.get(req_data['cart_id'])
+    db.session.delete(item)
+    db.session.commit()
+    return {"message": "deleted"}

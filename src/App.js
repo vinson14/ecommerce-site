@@ -13,19 +13,19 @@ function App() {
     return (
         <div className="h-100">
             <Router>
-                <Header />
                 <div className="App">
+                    <Header />
                     <Switch>
                         <Route exact path="/">
                             <Home />
                         </Route>
-                        <Route path="/shop">
+                        <Route exact path="/shop">
                             <Shop />
                         </Route>
-                        <Route path="/cart">
+                        <Route exact path="/cart">
                             <Cart />
                         </Route>
-                        <Route path="/signup">
+                        <Route exact path="/signup">
                             <SignUp />
                         </Route>
                     </Switch>

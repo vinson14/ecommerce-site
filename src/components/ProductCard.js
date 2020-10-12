@@ -3,15 +3,12 @@ import { Col, Card, Button } from "react-bootstrap";
 
 class ProductCard extends React.Component {
     addToCart = async () => {
-        console.log(this.props.product.seller_id);
-        console.log(this.props.product.id);
-
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 product_id: this.props.product.id,
-                quantity: 1
+                quantity: 1,
             }),
         };
 
@@ -19,6 +16,9 @@ class ProductCard extends React.Component {
             await fetch("/cart/add", requestOptions)
         ).json();
         console.log(response);
+        if (response.success) {
+            this.props.toast();
+        }
     };
 
     render() {

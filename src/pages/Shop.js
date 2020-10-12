@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Toast } from "react-bootstrap";
 
 import products from "../api/products.json";
 import ProductCard from "../components/ProductCard";
@@ -10,6 +10,7 @@ class Shop extends React.Component {
         super();
         this.state = {
             products: [],
+            showToast: false,
         };
     }
 
@@ -20,26 +21,42 @@ class Shop extends React.Component {
         });
     };
 
+    toggleToast = () => {
+        this.setState({
+            showToast: true,
+        });
+    };
+
     componentDidMount() {
         this.getProducts();
     }
 
     render() {
         return (
-            <div className="h-100">
-                <Container className="mt-5">
-                    <Row className="justify-content-center py-3">
-                        <Col>
-                            <h1 className="text-center">Shop</h1>
-                        </Col>
-                    </Row>
-                    <Row>
-                        {this.state.products.map((product) => (
-                            <ProductCard product={product} key={product.id} />
-                        ))}
-                    </Row>
-                </Container>
-            </div>
+            <Container className="d-flex flex-column justify-content-center align-items-center h-100">
+                <Row className="justify-content-center py-3 m-3">
+                    <Col>
+                        <h1 className="text-center my-3">Shop</h1>
+                        <Toast
+                            onClose={() => this.setState({ showToast: false })}
+                            show={this.state.showToast}
+                            delay={3000}
+                            autohide
+                        >
+                            <Toast.Body>Item has been added to cart</Toast.Body>
+                        </Toast>
+                    </Col>
+                </Row>
+                <Row>
+                    {this.state.products.map((product) => (
+                        <ProductCard
+                            product={product}
+                            key={product.id}
+                            toast={this.toggleToast}
+                        />
+                    ))}
+                </Row>
+            </Container>
         );
     }
 }
