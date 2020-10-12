@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import products from "../api/products.json";
 import ProductCard from "../components/ProductCard";
+import Header from "../components/Header";
 
 class Shop extends React.Component {
     constructor() {
@@ -14,11 +15,9 @@ class Shop extends React.Component {
 
     getProducts = async () => {
         const products = await (await fetch("/products")).json();
-        this.setState(
-            {
-                products: products.products
-            }
-        )
+        this.setState({
+            products: products.products,
+        });
     };
 
     componentDidMount() {
@@ -27,16 +26,16 @@ class Shop extends React.Component {
 
     render() {
         return (
-            <div>
-                <Container>
+            <div className="h-100">
+                <Container className="mt-5">
                     <Row className="justify-content-center py-3">
                         <Col>
                             <h1 className="text-center">Shop</h1>
                         </Col>
                     </Row>
                     <Row>
-                        {this.state.products.map(product => (
-                            <ProductCard product={product} key={product.id}/>
+                        {this.state.products.map((product) => (
+                            <ProductCard product={product} key={product.id} />
                         ))}
                     </Row>
                 </Container>

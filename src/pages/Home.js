@@ -15,7 +15,6 @@ class Home extends React.Component {
     render() {
         return (
             <Container className="h-100 align-items-center d-flex flex-column justify-content-center">
-                <Header />
                 <Row>
                     <Col>
                         <div className="p-5">
