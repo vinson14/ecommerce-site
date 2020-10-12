@@ -27,6 +27,5 @@ def create_app():
 
         # Create Database Models
         db.create_all()
-        print('hello')
 
         return app

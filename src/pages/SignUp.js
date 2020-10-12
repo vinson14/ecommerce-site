@@ -35,6 +35,35 @@ class SignUp extends React.Component {
                             </Button>
                         </Form>
                     </Col>
+                    <Col>
+                        <Form action="/auth/login" method="post">
+                            <Form.Group>
+                                <Form.Control
+                                    type="text"
+                                    name="username"
+                                    placeholder="Enter a username"
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Control
+                                    type="password"
+                                    name="password"
+                                    placeholder="Enter a password"
+                                />
+                            </Form.Group>
+                            <Button variant="outline-dark" type="submit">
+                                Login
+                            </Button>
+                        </Form>
+                        <Form action="/auth/logout" method="post">
+                            <Form.Group>
+                                <Form.Control type="text" name="name" />
+                            </Form.Group>
+                            <Button variant="outline-dark" type="submit">
+                                Logout
+                            </Button>
+                        </Form>
+                    </Col>
                 </Row>
             </Container>
         );

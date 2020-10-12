@@ -1,6 +1,8 @@
 from flask import Blueprint
 from flask import current_app as app
 
+from .. models import db, User, Product, Seller, Cart
+
 # Blueprint configuration
 home_bp = Blueprint(
     'home_bp', __name__,
