@@ -1,9 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Toast } from "react-bootstrap";
 
-import products from "../api/products.json";
 import ProductCard from "../components/ProductCard";
-import Header from "../components/Header";
 
 class Shop extends React.Component {
     constructor() {
@@ -11,6 +9,7 @@ class Shop extends React.Component {
         this.state = {
             products: [],
             showToast: false,
+            loggedIn: false,
         };
     }
 
@@ -27,8 +26,16 @@ class Shop extends React.Component {
         });
     };
 
+    isLoggedIn = async () => {
+        let res = await (await fetch("/auth/checklogin")).json();
+        this.setState({
+            loggedIn: res.loggedIn,
+        });
+    };
+
     componentDidMount() {
         this.getProducts();
+        this.isLoggedIn();
     }
 
     render() {
@@ -37,6 +44,11 @@ class Shop extends React.Component {
                 <Row className="justify-content-center py-3 m-3">
                     <Col>
                         <h1 className="text-center my-3">Shop</h1>
+                        {!this.state.isLoggedIn && (
+                            <h3 className="text-center my-3">
+                                You must be logged in to add to cart
+                            </h3>
+                        )}
                         <Toast
                             onClose={() => this.setState({ showToast: false })}
                             show={this.state.showToast}

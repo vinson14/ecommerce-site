@@ -17,3 +17,18 @@ a:hover {
 .active {
     border-bottom: 1px solid black;
 }
+
+body {
+    background-image: url(static/img/home-bg.jpg);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.row {
+    background-color: rgba(256,256,256,0.7);
+}
+
+nav {
+    background-color: rgba(256,256,256,0.7);
+}

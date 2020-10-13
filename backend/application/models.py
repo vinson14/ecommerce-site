@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
     )
 
     cart = db.relationship('Cart', backref='user', lazy=True)
+    product = db.relationship('Product', backref='seller', lazy=True)
 
     def set_password(self, password):
         """Create hashed password."""
@@ -65,48 +66,21 @@ class Product(db.Model):
         unique=False
     )
 
-    seller_id = db.Column(
+    quantity_in_stock = db.Column(
         db.Integer,
-        db.ForeignKey('sellers.id'),
-        nullable=False
-    )
-
-    cart = db.relationship('Cart', backref='product', lazy=True)
-
-
-class Seller(db.Model):
-
-    __tablename__ = "sellers"
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
-    seller_name = db.Column(
-        db.String(100),
-        nullable=False,
-        unique=True
-    )
-
-    seller_password = db.Column(
-        db.String(200),
         nullable=False,
         unique=False
     )
 
-    def set_password(self, password):
-        """Create hashed password."""
-        self.password = generate_password_hash(
-            password,
-            method='sha256'
-        )
+    seller_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id'),
+        nullable=False
+    )
 
-    def check_password(self, password):
-        """Check hashed password."""
-        return check_password_hash(self.password, password)
-
-    products = db.relationship('Product', backref='seller', lazy=True)
+    cart = db.relationship('Cart', backref='product', lazy=True)
+    purchase_history = db.relationship(
+        'PurchaseHistory', backref='product', lazy=True)
 
 
 class Cart(db.Model):

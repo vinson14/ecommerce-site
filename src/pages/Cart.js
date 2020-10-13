@@ -1,6 +1,7 @@
 import React from "react";
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
-import { isCompositeComponent } from "react-dom/test-utils";
+import { Container, Row, Col, Button } from "react-bootstrap";
+
+import CartTable from "../components/CartTable";
 
 class Cart extends React.Component {
     constructor() {
@@ -11,22 +12,11 @@ class Cart extends React.Component {
         };
     }
 
-    getTotalCost = (cart) => {
-        let totalCost = 0;
-
-        for (let i = 0; i < cart.length; i++) {
-            totalCost += cart[i].quantity * cart[i].product_price;
-        }
-
-        return totalCost;
-    };
-
     getCart = async () => {
         const cart = await (await fetch("/cart/get")).json();
 
         this.setState({
             cart: cart.cart,
-            totalCost: this.getTotalCost(cart.cart),
         });
     };
 
@@ -42,16 +32,17 @@ class Cart extends React.Component {
         const cart = await (await fetch("/cart/get")).json();
         this.setState({
             cart: cart.cart,
-            totalCost: this.getTotalCost(cart.cart),
         });
     };
 
     checkOut = async () => {
-        await fetch("/cart/checkout");
+        let res = await (await fetch("/cart/checkout")).json();
+        if (!res.status) {
+            alert(res.message);
+        }
         const cart = await (await fetch("/cart/get")).json();
         this.setState({
             cart: cart.cart,
-            totalCost: this.getTotalCost(cart.cart),
         });
     };
 
@@ -60,85 +51,53 @@ class Cart extends React.Component {
     }
 
     render() {
-        return (
-            <div className="h-100 d-flex flex-column justify-content-center align-items-center">
-                <Container>
-                    <Row>
-                        <Col>
-                            <h1 className="text-center">Cart</h1>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Table borderless>
-                                <thead className="text-center">
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.cart.map((item) => (
-                                        <tr
-                                            key={item.id}
-                                            className="text-center"
-                                        >
-                                            <td>{item.product_name}</td>
-                                            <td>{item.product_price}</td>
-                                            <td>{item.quantity}</td>
-                                            <td>
-                                                {item.quantity *
-                                                    item.product_price}
-                                            </td>
-                                            <td>
-                                                <Button
-                                                    onClick={(e) =>
-                                                        this.deleteProduct(
-                                                            item.id,
-                                                            e
-                                                        )
-                                                    }
-                                                    variant="outline-dark"
-                                                    className="mx-3"
-                                                >
-                                                    Delete
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td
-                                            colSpan="3"
-                                            className="text-right font -
-                                     weight-bold"
-                                        >
-                                            Total Price:
-                                        </td>
-                                        <td className="text-center">
-                                            {this.state.totalCost}
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </Table>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col className="d-flex justify-content-center p-3">
-                            <Button
-                                onClick={this.checkOut}
-                                variant="outline-dark"
-                            >
-                                Check out
-                            </Button>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        );
+        if (this.state.cart && this.state.cart.length !== 0) {
+            return (
+                <div className="h-100 d-flex flex-column justify-content-center align-items-center">
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h1 className="text-center">Cart</h1>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <CartTable
+                                    cart={this.state.cart}
+                                    deleteProduct={this.deleteProduct}
+                                />
+                            </Col>
+                        </Row>
+                        {this.state.cart && this.state.cart.length !== 0 && (
+                            <Row>
+                                <Col className="d-flex justify-content-center p-3">
+                                    <Button
+                                        onClick={this.checkOut}
+                                        variant="outline-dark"
+                                    >
+                                        Check out
+                                    </Button>
+                                </Col>
+                            </Row>
+                        )}
+                    </Container>
+                </div>
+            );
+        } else {
+            return (
+                <div className="h-100 d-flex flex-column justify-content-center align-items-center">
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h1 className="text-center p-5">
+                                    Your cart is empty
+                                </h1>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+            );
+        }
     }
 }
 

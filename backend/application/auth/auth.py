@@ -23,36 +23,50 @@ def auth():
 
 @auth_bp.route('/auth/signup', methods=['POST'])
 def auth_signup():
+    req_data = request.get_json()
+    user_exists = User.query.filter_by(username=req_data['username']).first()
+    if user_exists:
+        print('user exists')
+        return {"status": False,
+                "message": "Username already exists, \
+                    please choose another username"}
     user = User(
-        username=request.form['username']
+        username=req_data['username']
     )
-    user.set_password(request.form['password'])
+    user.set_password(req_data['password'])
     db.session.add(user)
     db.session.commit()
     login_user(user)
-    return {"username": request.form['username'],
-            "password": request.form['password']}
+    return {"status": True, "message": "Account created"}
+
+
+@auth_bp.route('/auth/checklogin', methods=['GET'])
+def check_login():
+    return {"loggedIn": current_user.is_authenticated}
 
 
 @auth_bp.route('/auth/login', methods=['POST'])
 def auth_login():
 
     if current_user.is_authenticated:
-        return {"message": "You are already logged in"}
+        return {"status": False, "message": "You are already logged in"}
 
-    user = User.query.filter_by(username=request.form['username']).first()
-    if user and user.check_password(password=request.form['password']):
+    req_data = request.get_json()
+    user = User.query.filter_by(username=req_data['username']).first()
+
+    if user and user.check_password(password=req_data['password']):
         login_user(user)
-        return {"logged in ": "true"}
+        return {"status": True}
     else:
-        return {"logged in": "false"}
+        return {"status": False, "message": "Wrong username/password"}
 
 
-@auth_bp.route('/auth/logout', methods=['POST'])
+@auth_bp.route('/auth/logout', methods=['GET'])
 @login_required
 def auth_logout():
     logout_user()
-    return {"message": "You were logged out"}
+    print(current_user.is_authenticated)
+    return {"status": True}
 
 
 @login_manager.user_loader

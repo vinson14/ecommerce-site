@@ -14,7 +14,6 @@ class Orders extends React.Component {
         this.setState({
             orders: orders.orders,
         });
-        console.log(this.state.orders);
     };
 
     componentDidMount() {
@@ -22,6 +21,38 @@ class Orders extends React.Component {
     }
 
     render() {
+        let yourOrders;
+
+        if (this.state.orders) {
+            yourOrders = this.state.orders.map((order) => (
+                <Table className="my-5" key={order.id}>
+                    <thead>
+                        <tr>
+                            <th>Order No.: {order.id}</th>
+                            <th>Total Price: {order.total_cost}</th>
+                            <th>Date and Time: {order.datetime}</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {order.items.map((item) => (
+                            <tr key={item.id}>
+                                <td>{item.product_name}</td>
+                                <td>{item.quantity}</td>
+                                <td>{item.product_price}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            ));
+        }
+
         return (
             <Container className="d-flex flex-column justify-content-center align-items-center h-100">
                 <Row className="my-5">
@@ -30,30 +61,7 @@ class Orders extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>Order No.</th>
-                                    <th>Total Cost</th>
-                                    <th>Date and Time</th>
-                                    <th>Products</th>
-                                    <th>Quantity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.orders.map((order) => (
-                                    <tr key={order.id}>
-                                        <td>{order.id}</td>
-                                        <td>{order.total_cost}</td>
-                                        <td>{order.datetime}</td>
-                                        <td>{order.items[0].product_id}</td>
-                                        <td>{order.items[0].quantity}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </Table>
-                    </Col>
+                    <Col>{yourOrders}</Col>
                 </Row>
             </Container>
         );

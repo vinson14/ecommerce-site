@@ -22,7 +22,9 @@ def orders_all():
             "datetime": order.datetime,
             "items": [
                 {
-                    "product_id": item.product_id,
+                    "id": item.id,
+                    "product_name": item.product.product_name,
+                    "product_price": item.product.product_price,
                     "quantity": item.quantity
                 }
                 for item in order.purchase_history

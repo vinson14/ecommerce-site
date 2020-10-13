@@ -8,6 +8,9 @@ import Shop from "./pages/Shop";
 import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
+import Logout from "./pages/Logout";
+import Selling from "./pages/Selling";
+import Login from "./pages/Login";
 import Header from "./components/Header";
 
 function App() {
@@ -26,11 +29,20 @@ function App() {
                         <Route exact path="/cart">
                             <Cart />
                         </Route>
+                        <Route exact path="/orders">
+                            <Orders />
+                        </Route>
+                        <Route exact path="/selling">
+                            <Selling />
+                        </Route>
                         <Route exact path="/signup">
                             <SignUp />
                         </Route>
-                        <Route exact path="/orders">
-                            <Orders />
+                        <Route exact path="/login">
+                            <Login />
+                        </Route>
+                        <Route exact path="/logout">
+                            <Logout />
                         </Route>
                     </Switch>
                 </div>

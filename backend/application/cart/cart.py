@@ -74,6 +74,10 @@ def checkout():
         user_id=current_user.id
     )
 
+    for cart_item in cart_items:
+        if cart_item.quantity > cart_item.product.quantity_in_stock:
+            return {"status": False, "message": f"{cart_item.product.product_name} does not have enough stock"}
+
     total_cost = sum([
         item.quantity * item.product.product_price
         for item in cart_items
@@ -87,7 +91,7 @@ def checkout():
     db.session.add(new_order)
     db.session.commit()
 
-    order_id = Order.query.first().id
+    order_id = Order.query.order_by(Order.id.desc()).first().id
 
     for item in cart_items:
         history_item = PurchaseHistory(
@@ -98,4 +102,4 @@ def checkout():
         db.session.add(history_item)
         db.session.delete(item)
     db.session.commit()
-    return {"success": True}
+    return {"status": True}

@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Card, Button } from "react-bootstrap";
 
 class ProductCard extends React.Component {
-    addToCart = async () => {
+    deleteFromSelling = async () => {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -13,11 +13,8 @@ class ProductCard extends React.Component {
         };
 
         const response = await (
-            await fetch("/cart/add", requestOptions)
+            await fetch("/products/delete", requestOptions)
         ).json();
-        if (response.success) {
-            this.props.toast();
-        }
     };
 
     render() {
@@ -38,13 +35,10 @@ class ProductCard extends React.Component {
                         <Card.Text>
                             Sold by: {this.props.product.seller_name}
                         </Card.Text>
-                        {
-                            this.props.product.quantity_in_stock < 1 &&
-                            <Card.Text>
-                                This product is out of stock
-                            </Card.Text>
-                        }
-                        <Button onClick={this.addToCart}>Add to cart</Button>
+                        {this.props.product.quantity_in_stock < 1 && (
+                            <Card.Text>This product is out of stock</Card.Text>
+                        )}
+                        <Button onClick={this.deleteFromSelling}>Delete</Button>
                     </Card.Body>
                 </Card>
             </Col>
